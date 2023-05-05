@@ -1,9 +1,9 @@
 import { API_HOST } from '../constants/Api';
-import { FetchWrapperOptions } from './types';
+import { TFetchWrapperOptions } from './types';
 
 export const fetchWrapper = async (
   url: string,
-  options?: FetchWrapperOptions
+  options?: TFetchWrapperOptions
 ): Promise<any> => {
   const response = await fetch(`${API_HOST}${url}`, options);
   if (!response.ok) {

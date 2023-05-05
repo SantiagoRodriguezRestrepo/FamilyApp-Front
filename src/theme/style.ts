@@ -4,3 +4,4 @@ export const ColorPrimary = '#2e72ac';
 export const ColorHoverPrimary = '#235784';
 export const ColorDanger = '#ab3f4b';
 export const ColorHoverDanger = '#952e39';
+export const ColorGray60 = '#97a2b4';

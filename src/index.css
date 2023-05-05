@@ -12,7 +12,17 @@ code {
     monospace;
 } */
 
-
-html, #root {
+body {
   height: 100%;
+}
+
+
+html,
+#root {
+  height: 100%;
+}
+
+ol,
+ul {
+  list-style: none;
 }
