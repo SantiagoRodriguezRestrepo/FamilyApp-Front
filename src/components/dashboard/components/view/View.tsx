@@ -5,6 +5,7 @@ import { HiOutlinePhotograph } from 'react-icons/hi';
 import { MdCleaningServices, MdOutlineImageSearch } from 'react-icons/md';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { PopUpImage } from './components/popUpImage/PopUpImage';
 
 export const View = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -89,6 +90,8 @@ export const View = () => {
     setFilteredUsers([]);
   };
 
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <>
       <Container className="text-center pt-3 mt-3">
@@ -133,7 +136,10 @@ export const View = () => {
                       <td>{user.id_usuario}</td>
                       <td>sadasdasdadsasd</td>
                       <td className="d-flex gap-2">
-                        <ButtonCustom color="primary">
+                        <ButtonCustom
+                          color="primary"
+                          onClick={() => setShowModal(true)}
+                        >
                           <HiOutlinePhotograph />
                         </ButtonCustom>
                         <ButtonCustom color="danger">
@@ -148,6 +154,7 @@ export const View = () => {
           </Container>
         </Card>
       </Container>
+      <PopUpImage showModal={showModal} setShowModal={setShowModal} />
     </>
   );
-}
+};

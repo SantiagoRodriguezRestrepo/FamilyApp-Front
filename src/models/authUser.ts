@@ -13,3 +13,9 @@ export interface IUser {
   tipoUsuario: number;
   contrasena: string;
 }
+export interface IRecluse {
+  idReclusa : string;
+  nombre: string;
+  apellido: string;
+  idFamiliar : string;
+}
