@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Familiar } from './Familiar/Familiar';
-import './style.css';
 import { Reclusa } from './Recluso/Reclusa';
 import { Container } from 'react-bootstrap';
 import { ButtonCustom, Card } from '../../../../../theme/components/style';
