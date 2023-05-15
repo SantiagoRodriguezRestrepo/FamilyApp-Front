@@ -23,3 +23,20 @@ export interface IUser {
   apellido: string;
   rol: number;
 }
+export interface IRecord {
+  nombre: string;
+  apellido: string;
+  idRegistro: number;
+  urlImagen: string;
+  titulo: string;
+  comentario: string;
+  fecha: Date;
+  estado: number;
+  idReclusa: string;
+}
+export interface IRecluse {
+  idReclusa: string;
+  nombre: string;
+  apellido: string;
+  representante: string;
+}

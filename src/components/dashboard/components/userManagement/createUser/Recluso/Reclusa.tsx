@@ -5,8 +5,9 @@ import { ButtonCustom } from '../../../../../../theme/components/style';
 import { END_POINTS } from '../../../../../../constants/Api';
 import { fetchWrapper } from '../../../../../../utils/functions';
 import { toast } from 'sonner';
+import { TPropsCreateRecluse } from '../../../../../../utils/types';
 
-export const Reclusa = () => {
+export const Reclusa = ({ fetchDataRecluse }: TPropsCreateRecluse) => {
   const {
     register,
     formState: { errors },
@@ -15,10 +16,12 @@ export const Reclusa = () => {
 
   const onSubmit = async (data: IRecluse) => {
     try {
-      const url = `${END_POINTS.CREATE_RECLUSE}?idReclusa=${data.idReclusa}&nombre=${data.nombre}&apellido=${data.apellido}&idFamiliar=${data.idFamiliar}`;
+      const url = `${END_POINTS.RECLUSE}?idReclusa=${data.idReclusa}&nombre=${data.nombre}&apellido=${data.apellido}&idFamiliar=${data.idFamiliar}`;
       const options = { method: 'POST' };
       await fetchWrapper(url, options);
+      fetchDataRecluse();
     } catch (error) {
+      fetchDataRecluse();
       toast.error('No se ha podido crear la reclusa.');
       throw new Error(`Error al crear reclusa: ${error}`);
     }

@@ -4,19 +4,13 @@ import { useEffect, useState } from 'react';
 import { CreateUser } from './createUser/CreateUser';
 import { DeleteUser } from './deleteUser/DeleteUser';
 import { END_POINTS } from '../../../../constants/Api';
+import { IRecluse } from '../../../../utils/interfaces';
 
 export const UserManagement = () => {
-  const [dataUser, setDataUser] = useState<IUser[]>([
-    {
-      id_usuario: '',
-      nombre: '',
-      apellido: '',
-      tipoUsuario: 0,
-      contrasena: '',
-    },
-  ]);
+  const [dataRecluse, setDataRecluse] = useState<IRecluse[]>([]);
+  const [dataUser, setDataUser] = useState<IUser[]>([]);
 
-  const fetchData = async () => {
+  const fetchDataUser = async () => {
     try {
       const url = END_POINTS.USERS;
       const options = { method: 'GET' };
@@ -27,14 +21,33 @@ export const UserManagement = () => {
     }
   };
 
+  const fetchDataRecluse = async () => {
+    try {
+      const url = END_POINTS.RECLUSE;
+      const options = { method: 'GET' };
+      const prueba: IRecluse[] = await fetchWrapper(url, options);
+      setDataRecluse(prueba);
+    } catch (error) {
+      throw new Error(`Error al eliminar usuario: ${error}`);
+    }
+  };
+
   useEffect(() => {
-    fetchData();
+    fetchDataUser();
   }, []);
 
   return (
     <>
-      <CreateUser fetchData={fetchData} />
-      <DeleteUser dataUser={dataUser} fetchData={fetchData} />
+      <CreateUser
+        fetchDataUser={fetchDataUser}
+        fetchDataRecluse={fetchDataRecluse}
+      />
+      <DeleteUser
+        dataRecluse={dataRecluse}
+        dataUser={dataUser}
+        fetchDataUser={fetchDataUser}
+        fetchDataRecluse={fetchDataRecluse}
+      />
     </>
   );
 };

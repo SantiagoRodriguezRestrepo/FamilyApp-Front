@@ -5,5 +5,6 @@ export const END_POINTS = {
   SIGNUP: '/usuario',
   USERS: '/usuario',
   DELETE_USER: '/usuario',
-  CREATE_RECLUSE: '/reclusa'
+  RECLUSE: '/reclusa',
+  RECORD: '/registro'
 };

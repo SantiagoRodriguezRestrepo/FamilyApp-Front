@@ -8,9 +8,9 @@ import bcrypt from 'bcryptjs';
 import { fetchWrapper } from '../../../../../../utils/functions';
 import { IUser } from '../../../../../../models/authUser';
 import { END_POINTS } from '../../../../../../constants/Api';
-import { PropsCreate } from '../../../../../../utils/types';
+import { TPropsCreateFamiliar } from '../../../../../../utils/types';
 
-export const Familiar = ({ fetchData }: PropsCreate) => {
+export const Familiar = ({ fetchDataUser }: TPropsCreateFamiliar) => {
   const {
     register,
     formState: { errors },
@@ -49,9 +49,9 @@ export const Familiar = ({ fetchData }: PropsCreate) => {
       const url = `${END_POINTS.SIGNUP}?idUsuario=${data.id_usuario}&nombre=${data.nombre}&apellido=${data.apellido}&tipoUsuario=${data.tipoUsuario}&contrasena=${formatData.contrasena}`;
       const options = { method: 'POST' };
       await fetchWrapper(url, options);
-      await fetchData();
+      await fetchDataUser();
     } catch (error) {
-      await fetchData();
+      await fetchDataUser();
       throw new Error(`Error al crear usuario: ${error}`);
     }
   };

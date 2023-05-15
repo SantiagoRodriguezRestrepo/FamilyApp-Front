@@ -6,30 +6,46 @@ import { fetchWrapper } from '../../../../../utils/functions';
 import { IUser } from '../../../../../models/authUser';
 import { TableCustom } from './style';
 import { END_POINTS } from '../../../../../constants/Api';
+import { TPropsDeleteUser } from '../../../../../utils/types';
+import { useEffect } from 'react';
+import { IRecluse } from '../../../../../utils/interfaces';
 
-type Props = {
-  dataUser: IUser[];
-  fetchData: () => Promise<void>;
-};
-
-export const DeleteUser = ({ dataUser, fetchData }: Props) => {
-  const onDeleteUser = async (id: string) => {
+export const DeleteUser = ({
+  dataUser,
+  dataRecluse,
+  fetchDataUser,
+  fetchDataRecluse,
+}: TPropsDeleteUser) => {
+  const onDeleteUser = async (type: string, id: string) => {
     try {
-      const url = `${END_POINTS.USERS}?idUsuario=${id}`;
+      const url =
+        type === 'user'
+          ? `${END_POINTS.USERS}?idUsuario=${id}`
+          : `${END_POINTS.RECLUSE}/${id}`;
       const options = { method: 'DELETE' };
       await fetchWrapper(url, options);
-      fetchData();
+      fetchDataUser();
+      fetchDataRecluse();
     } catch (error) {
-      fetchData();
-      throw new Error(`Error al eliminar usuario: ${error}`);
+      fetchDataRecluse();
+      fetchDataUser();
+      throw new Error(
+        `Error al eliminar ${type === 'user' ? 'usuario' : 'reclusa'}: ${error}`
+      );
     }
   };
 
-  const confirmDeleteUser = (user: IUser) => {
+  const confirmDeleteUser = (type: string, user: IUser | IRecluse) => {
     toast.error(`Desea elminar a ${user.nombre} ${user.apellido}?`, {
       action: {
         label: 'Aceptar',
-        onClick: () => onDeleteUser(user.id_usuario),
+        onClick: () => {
+          if ('idReclusa' in user) {
+            onDeleteUser(type, user.idReclusa);
+          } else {
+            onDeleteUser(type, user.id_usuario);
+          }
+        },
       },
       cancel: {
         label: 'Cancelar',
@@ -37,6 +53,10 @@ export const DeleteUser = ({ dataUser, fetchData }: Props) => {
       },
     });
   };
+
+  useEffect(() => {
+    fetchDataRecluse();
+  }, []);
 
   return (
     <Container className="mt-5">
@@ -65,7 +85,39 @@ export const DeleteUser = ({ dataUser, fetchData }: Props) => {
                   <td className="d-flex justify-content-center">
                     <ButtonCustom
                       color="danger"
-                      onClick={() => confirmDeleteUser(user)}
+                      onClick={() => confirmDeleteUser('user', user)}
+                    >
+                      <TiUserDelete />
+                    </ButtonCustom>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </TableCustom>
+        </div>
+      </Card>
+      <Card className="mt-5">
+        <h3 className="mb-5">Reclusas registradas:</h3>
+        <div>
+          <TableCustom striped bordered responsive>
+            <thead>
+              <tr>
+                <th>Cédula</th>
+                <th>Nombre</th>
+                <th>Eliminar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dataRecluse.map(recluse => (
+                <tr key={recluse.idReclusa}>
+                  <td>{recluse.idReclusa}</td>
+                  <td>
+                    {recluse.nombre} {recluse.apellido}
+                  </td>
+                  <td className="d-flex justify-content-center">
+                    <ButtonCustom
+                      color="danger"
+                      onClick={() => confirmDeleteUser('recluse', recluse)}
                     >
                       <TiUserDelete />
                     </ButtonCustom>

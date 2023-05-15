@@ -4,7 +4,7 @@ import { Reclusa } from './Recluso/Reclusa';
 import { Container } from 'react-bootstrap';
 import { ButtonCustom, Card } from '../../../../../theme/components/style';
 
-export const CreateUser = ({ fetchData }: any) => {
+export const CreateUser = ({ fetchDataUser, fetchDataRecluse }: any) => {
   const [isUser, setIsUser] = useState(true);
 
   return (
@@ -21,9 +21,9 @@ export const CreateUser = ({ fetchData }: any) => {
             </ButtonCustom>
           </div>
           {isUser ? (
-            <Familiar fetchData={fetchData} setIsUser={setIsUser} />
+            <Familiar fetchDataUser={fetchDataUser} setIsUser={setIsUser} />
           ) : (
-            <Reclusa />
+            <Reclusa fetchDataRecluse={fetchDataRecluse} />
           )}
         </Card>
       </Container>

@@ -3,73 +3,25 @@ import { ButtonCustom, Card } from '../../../../theme/components/style';
 import { TiDocumentDelete } from 'react-icons/ti';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 import { MdCleaningServices, MdOutlineImageSearch } from 'react-icons/md';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { PopUpImage } from './components/popUpImage/PopUpImage';
+import { END_POINTS } from '../../../../constants/Api';
+import { fetchWrapper } from '../../../../utils/functions';
+import { IRecord } from '../../../../utils/interfaces';
 
 export const View = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
-  const provicional = [
-    {
-      id_usuario: '1012458610',
-      nombre: 'Edwarr',
-      apellido: 'Roldan',
-      tipoUsuario: 2,
-      contrasena: 'Bogota2023.',
-    },
-    {
-      id_usuario: '117234562',
-      nombre: 'Juan',
-      apellido: 'Paez',
-      tipoUsuario: 2,
-      contrasena: 'Bogota2023.',
-    },
-    {
-      id_usuario: '1192785436',
-      nombre: 'Johan',
-      apellido: 'Sandoval',
-      tipoUsuario: 2,
-      contrasena: 'Bogota2023.',
-    },
-    {
-      id_usuario: '1192786859',
-      nombre: 'Vincent',
-      apellido: 'Rodriguez',
-      tipoUsuario: 1,
-      contrasena: 'Colombia2023*',
-    },
-    {
-      id_usuario: '1234567890',
-      nombre: 'admin',
-      apellido: 'admin',
-      tipoUsuario: 1,
-      contrasena:
-        '$2a$10$Dr93cXpVh44IjhTZmq0qBOqJpGRwtSUR7NCE3RhGvwIA10ug4MAL.',
-    },
-    {
-      id_usuario: '52773404',
-      nombre: 'Omaira',
-      apellido: 'Cardona',
-      tipoUsuario: 1,
-      contrasena: 'Colombia2023*',
-    },
-    {
-      id_usuario: '527735054',
-      nombre: 'Elvia',
-      apellido: 'Restrepo',
-      tipoUsuario: 2,
-      contrasena: 'Bogota2023.',
-    },
-  ];
+  const [records, setRecords] = useState<IRecord[]>([]);
+  const [showModal, setShowModal] = useState(false);
 
   const handleSearch = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const filtered = provicional.filter(
-      user =>
-        user.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.apellido.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.id_usuario.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = records.filter(
+      record =>
+        record.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        record.apellido.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     if (filtered.length === 0) {
@@ -77,6 +29,27 @@ export const View = () => {
     } else {
       setFilteredUsers(filtered);
     }
+  };
+
+  useEffect(() => {
+    getRecords();
+  }, []);
+
+  const getRecords = async () => {
+    try {
+      const url = END_POINTS.RECORD;
+      const options = { method: 'GET' };
+      const userData: IRecord[] = await fetchWrapper(url, options);
+      setRecords(userData);
+    } catch (error) {
+      throw new Error(`Error al consultar los registros: ${error}`);
+    }
+  };
+
+  const formatDate = (date: Date): string => {
+    const fecha = new Date(date);
+    const formato = fecha.toLocaleDateString();
+    return formato;
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +63,30 @@ export const View = () => {
     setFilteredUsers([]);
   };
 
-  const [showModal, setShowModal] = useState(false);
+  const onDeleteUser = async (id: number) => {
+    try {
+      const url = `${END_POINTS.RECORD}/${id}`;
+      const options = { method: 'DELETE' };
+      await fetchWrapper(url, options);
+      getRecords();
+    } catch (error) {
+      getRecords();
+      throw new Error(`Error al eliminar registro: ${error}`);
+    }
+  };
+
+  const confirmDeleteRecord = (title: string, id: number) => {
+    toast.error(`Desea elminar el registro ${title}`, {
+      action: {
+        label: 'Aceptar',
+        onClick: () => onDeleteUser(id),
+      },
+      cancel: {
+        label: 'Cancelar',
+        onClick: toast.dismiss,
+      },
+    });
+  };
 
   return (
     <>
@@ -116,35 +112,44 @@ export const View = () => {
             </InputGroup>
           </Container>
           <Container>
-            <Table striped bordered hover>
+            <Table bordered striped responsive>
               <thead>
                 <tr>
                   <th>Nombres</th>
                   <th>Fecha carga</th>
+                  <th>Titulo</th>
                   <th>Descripción</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {(filteredUsers.length ? filteredUsers : provicional).map(
-                  user => (
-                    <tr key={user.id_usuario}>
+                {(filteredUsers.length ? filteredUsers : records).map(
+                  record => (
+                    <tr key={record.idRegistro}>
+                      <td>asdasda</td>
+                      <td>{formatDate(record.fecha)}</td>
+                      <td>{record.titulo}</td>
+                      <td>{record.comentario}</td>
                       <td>
-                        {' '}
-                        {user.nombre} {user.apellido}
-                      </td>
-                      <td>{user.id_usuario}</td>
-                      <td>sadasdasdadsasd</td>
-                      <td className="d-flex gap-2">
-                        <ButtonCustom
-                          color="primary"
-                          onClick={() => setShowModal(true)}
-                        >
-                          <HiOutlinePhotograph />
-                        </ButtonCustom>
-                        <ButtonCustom color="danger">
-                          <TiDocumentDelete />
-                        </ButtonCustom>
+                        <div className="d-flex gap-2">
+                          <ButtonCustom
+                            color="primary"
+                            onClick={() => setShowModal(true)}
+                          >
+                            <HiOutlinePhotograph />
+                          </ButtonCustom>
+                          <ButtonCustom
+                            color="danger"
+                            onClick={() =>
+                              confirmDeleteRecord(
+                                record.titulo,
+                                record.idRegistro
+                              )
+                            }
+                          >
+                            <TiDocumentDelete />
+                          </ButtonCustom>
+                        </div>
                       </td>
                     </tr>
                   )
