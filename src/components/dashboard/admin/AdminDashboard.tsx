@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext, AuthContextType } from '../../../context/AuthContext';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../constants/Routes';
 import { Container, Row, Offcanvas, Nav } from 'react-bootstrap';
 import { CgLogOut } from 'react-icons/cg';
@@ -21,6 +21,7 @@ import { AdministratorMessage } from '../components/administratorMessage/Adminis
 import { ADMIN_OPTIONS } from '../../../constants/consts';
 import { UserManagement } from '../components/userManagement';
 import { View } from '../components/view/View';
+import { getValues } from '../../../utils/functions';
 
 const AdminDashboard = () => {
   const [show, setShow] = useState<boolean>(false);
@@ -28,8 +29,10 @@ const AdminDashboard = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const authContext = useContext<AuthContextType | undefined>(AuthContext);
-  const isAuthenticated = authContext?.userAuthenticated?.id;
+  const isAuthenticated = getValues(authContext?.userAuthenticated);
+  const isAdmin = authContext?.userAuthenticated?.rol === 1 ? true : false;
   const location = useLocation();
+  const navigation = useNavigate();
 
   const renderComponent = () => {
     switch (optionSelected) {
@@ -43,9 +46,21 @@ const AdminDashboard = () => {
   };
   const renderIcon = (name: string) => name.includes('Usuarios');
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !isAdmin) {
     return <Navigate to={ROUTES.LOGIN} replace state={{ from: location }} />;
   }
+
+  const handleLogout = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    authContext!.setUserAuthenticated({
+      id: '',
+      nombre: '',
+      apellido: '',
+      rol: 0
+    });
+    localStorage.removeItem('user');
+    navigation(ROUTES.LOGIN);
+  };
 
   return (
     <Container fluid className="h-100">
@@ -65,7 +80,7 @@ const AdminDashboard = () => {
                   src={LogoImage}
                   alt="Familiapp"
                 />
-                <Name>{authContext?.userAuthenticated.nombre}</Name>
+                <Name>{authContext?.userAuthenticated?.nombre}</Name>
                 <Nav className="justify-content-center flex-grow-1 flex-column w-75">
                   <ul>
                     {ADMIN_OPTIONS.map(adminOption => (
@@ -93,7 +108,10 @@ const AdminDashboard = () => {
                     ))}
                   </ul>
                 </Nav>
-                <Option className="d-flex gap-2 align-items-center py-2 w-75">
+                <Option
+                  className="d-flex gap-2 align-items-center py-2 w-75"
+                  onClick={handleLogout}
+                >
                   <CgLogOut />
                   Salir
                 </Option>
@@ -110,7 +128,7 @@ const AdminDashboard = () => {
               renderComponent()
             ) : (
               <AdministratorMessage
-                name={authContext?.userAuthenticated.nombre}
+                name={authContext?.userAuthenticated?.nombre ?? 'Usuario'}
               />
             )}
           </MainContainer>

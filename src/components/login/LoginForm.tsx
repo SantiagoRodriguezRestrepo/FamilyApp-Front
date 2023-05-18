@@ -1,8 +1,12 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Button, Col, Form, InputGroup } from 'react-bootstrap';
 import { END_POINTS } from '../../constants/Api';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import { fetchWrapper, handleOnlyNumbers } from '../../utils/functions';
+import {
+  fetchWrapper,
+  getValues,
+  handleOnlyNumbers,
+} from '../../utils/functions';
 import { toast } from 'sonner';
 import LogoImage from '../../assets/logo64.png';
 import {
@@ -19,7 +23,7 @@ import { TToken } from '../../utils/types';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../../context/AuthContext';
 import { decodeJWT } from '../../utils/auth';
-
+import { ROUTES } from '../../constants/Routes';
 
 export const LoginForm = () => {
   const [userId, setUserId] = useState<string>('');
@@ -27,9 +31,24 @@ export const LoginForm = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const authContext = useContext<AuthContextType | undefined>(AuthContext);
-
-
   const navigation = useNavigate();
+
+  const validateUserLogged = () => {
+    const isAuthenticated = getValues(authContext?.userAuthenticated);
+    const isAdmin = authContext?.userAuthenticated?.rol === 1 ? true : false;
+
+    if (!isAuthenticated) {
+      return;
+    }
+    if (isAdmin) {
+      return navigation(ROUTES.ADMIN);
+    }
+    return navigation(ROUTES.USER);
+  };
+
+  useEffect(() => {
+    validateUserLogged();
+  }, []);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,10 +56,13 @@ export const LoginForm = () => {
       const url = `${END_POINTS.LOGIN}?idUsuario=${userId}&contrasena=${userPassword}`;
       const options = { method: 'POST' };
       const response: TToken = await fetchWrapper(url, options);
-      const dataUser = decodeJWT(response.token)
+      const dataUser = decodeJWT(response.token);
       if (authContext && dataUser) {
         authContext.setUserAuthenticated(dataUser);
-        navigation('/admin')
+        if (dataUser.rol === 1) {
+          return navigation('/admin');
+        }
+        navigation('/user');
       }
     } catch (error) {
       toast.error('Usuario o contraseña invalidos.');

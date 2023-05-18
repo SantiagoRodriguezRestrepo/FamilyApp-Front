@@ -18,10 +18,8 @@ export const View = () => {
 
   const handleSearch = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const filtered = records.filter(
-      record =>
-        record.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        record.apellido.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = records.filter(record =>
+      record.idReclusa.includes(searchQuery)
     );
 
     if (filtered.length === 0) {
@@ -115,7 +113,7 @@ export const View = () => {
             <Table bordered striped responsive>
               <thead>
                 <tr>
-                  <th>Nombres</th>
+                  <th>Cédula reclusa</th>
                   <th>Fecha carga</th>
                   <th>Titulo</th>
                   <th>Descripción</th>
@@ -124,9 +122,9 @@ export const View = () => {
               </thead>
               <tbody>
                 {(filteredUsers.length ? filteredUsers : records).map(
-                  record => (
+                  (record: IRecord) => (
                     <tr key={record.idRegistro}>
-                      <td>asdasda</td>
+                      <td>{record.idReclusa}</td>
                       <td>{formatDate(record.fecha)}</td>
                       <td>{record.titulo}</td>
                       <td>{record.comentario}</td>
