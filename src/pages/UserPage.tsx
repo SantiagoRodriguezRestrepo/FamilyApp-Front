@@ -1,5 +1,5 @@
+import { UserDashboard } from '../components/dashboard/user/UserDashboard';
+
 export const UserPage = () => {
-  return (
-    <div>UserPage</div>
-  )
-}
+  return <UserDashboard />;
+};

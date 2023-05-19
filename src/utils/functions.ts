@@ -4,7 +4,7 @@ import { TFetchWrapperOptions } from './types';
 
 export const fetchWrapper = async (
   url: string,
-  options?: TFetchWrapperOptions
+  options?: TFetchWrapperOptions,
 ): Promise<any> => {
   const response = await fetch(`${API_HOST}${url}`, options);
   if (!response.ok) {

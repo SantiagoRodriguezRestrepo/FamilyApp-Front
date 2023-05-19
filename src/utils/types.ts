@@ -29,6 +29,7 @@ export type TPropsCreateRecluse = {
 export type TPropsPopUpImage = {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
+  image: string;
 };
 
 export type TPropsDeleteUser = {

@@ -3,8 +3,13 @@ import { TPropsPopUpImage } from '../../../../../../utils/types';
 import { ReactPhotoSphereViewer } from 'react-photo-sphere-viewer';
 import { useRef } from 'react';
 
-export const PopUpImage = ({ showModal, setShowModal }: TPropsPopUpImage) => {
+export const PopUpImage = ({
+  showModal,
+  setShowModal,
+  image,
+}: TPropsPopUpImage) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const imagePath = image.substring(image.lastIndexOf('\\') + 1);
   return (
     <>
       <Modal show={showModal} onHide={() => setShowModal(false)} size="xl">
@@ -14,7 +19,7 @@ export const PopUpImage = ({ showModal, setShowModal }: TPropsPopUpImage) => {
         <Modal.Body>
           <div ref={containerRef}>
             <ReactPhotoSphereViewer
-              src="/img/panoramica.avif"
+              src={`/img/${imagePath}`}
               height={'80vh'}
               width={'100%'}
               container={containerRef.current!}

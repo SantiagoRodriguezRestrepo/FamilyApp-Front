@@ -40,3 +40,9 @@ export interface IRecluse {
   apellido: string;
   representante: string;
 }
+export interface IRegister {
+  title: string;
+  family: string;
+  description: string;
+  file: any;
+}

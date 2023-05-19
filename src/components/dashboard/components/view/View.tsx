@@ -15,6 +15,7 @@ export const View = () => {
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [records, setRecords] = useState<IRecord[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [image, setImage] = useState<string>('');
 
   const handleSearch = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -132,7 +133,10 @@ export const View = () => {
                         <div className="d-flex gap-2">
                           <ButtonCustom
                             color="primary"
-                            onClick={() => setShowModal(true)}
+                            onClick={() => {
+                              setShowModal(true);
+                              setImage(record.urlImagen);
+                            }}
                           >
                             <HiOutlinePhotograph />
                           </ButtonCustom>
@@ -157,7 +161,15 @@ export const View = () => {
           </Container>
         </Card>
       </Container>
-      <PopUpImage showModal={showModal} setShowModal={setShowModal} />
+      {showModal ? (
+        <PopUpImage
+          showModal={showModal}
+          setShowModal={setShowModal}
+          image={image}
+        />
+      ) : (
+        <></>
+      )}
     </>
   );
 };

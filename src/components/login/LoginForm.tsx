@@ -19,7 +19,6 @@ import {
 } from './style';
 import { ButtonCustom, Logo } from '../../theme/components/style';
 import { TToken } from '../../utils/types';
-// import TokenService from '../../services/TokenService';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../../context/AuthContext';
 import { decodeJWT } from '../../utils/auth';

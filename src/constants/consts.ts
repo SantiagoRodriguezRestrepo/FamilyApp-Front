@@ -9,6 +9,13 @@ export const ADMIN_OPTIONS = [
   },
 ];
 
+export const USER_OPTIONS = [
+  {
+    NAME: 'Cargar registro',
+    VALUE: 'upload',
+  }
+];
+
 export const USER_TYPES = [
   {
     NAME: 'Administrador',
