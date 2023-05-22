@@ -17,9 +17,10 @@ export const fetchWrapper = async (
 
 export const handleOnlyNumbers = (value: string) => value.replace(/\D/g, '');
 
-export const handleOnlyLetters = (value: string) => value.replace(/[^A-Za-z\s]/g, '');
+export const handleOnlyLetters = (value: string) =>
+  value.replace(/[^A-Za-z\s]/g, '');
 
-export const getValues = (user: IUser | undefined): boolean => {
+export const validateValues = (user: IUser | undefined): boolean => {
   if (!user || Object.entries(user).length === 0 || !user.id) {
     return false;
   }
@@ -44,13 +45,17 @@ export const formatDateString = (date: Date): string => {
   return `${day} de ${monthString} de ${year}`;
 };
 
-export const handleInputChangeString = (event: React.ChangeEvent<HTMLInputElement>) => {
+export const handleInputChangeString = (
+  event: React.ChangeEvent<HTMLInputElement>
+) => {
   const { value } = event.target;
   const stringValue = handleOnlyLetters(value);
   event.target.value = stringValue;
 };
 
-export const handleInputChangeNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+export const handleInputChangeNumber = (
+  event: React.ChangeEvent<HTMLInputElement>
+) => {
   const { value } = event.target;
   const numericValue = handleOnlyNumbers(value);
   event.target.value = numericValue;

@@ -18,7 +18,7 @@ import { ButtonCustom, Card } from '../../../theme/components/style';
 import { useForm } from 'react-hook-form';
 import { IRecluse, IRegister } from '../../../utils/interfaces';
 import { END_POINTS } from '../../../constants/Api';
-import { fetchWrapper, getValues } from '../../../utils/functions';
+import { fetchWrapper, validateValues } from '../../../utils/functions';
 import { toast } from 'sonner';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 
@@ -26,7 +26,7 @@ export const UserDashboard = () => {
   const [dataUser, setDataUser] = useState<IRecluse[]>([]);
   const authContext = useContext<AuthContextType | undefined>(AuthContext);
   const navigation = useNavigate();
-  const isAuthenticated = getValues(authContext?.userAuthenticated);
+  const isAuthenticated = validateValues(authContext?.userAuthenticated);
   const isUser = authContext?.userAuthenticated?.rol === 2 ? true : false;
   const location = useLocation();
 
@@ -62,6 +62,7 @@ export const UserDashboard = () => {
       toast.success('Registro creado.');
       reset();
     } catch (error) {
+      toast.error('El registro no se pudo crear.');
       throw new Error(`Error al crear registro: ${error}`);
     }
   };
@@ -188,7 +189,7 @@ export const UserDashboard = () => {
                             Debe cargar una única imagen, la recomendación es
                             una imagen panorámica u optimizada para visualizar
                             en 360 grados preferiblemente en formatos JPEG, JPG,
-                            PNG, AVIF
+                            AVIF
                           </Tooltip>
                         }
                       >

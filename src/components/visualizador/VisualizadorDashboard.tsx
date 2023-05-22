@@ -90,7 +90,7 @@ export const VisualizadorDashboard = ({
                   alt="Familiapp"
                 />
                 <h1>Familiapp</h1>
-                <Nav className="justify-content-center flex-grow-1 flex-column w-75">
+                <Nav className="justify-content-center flex-grow-1 flex-column w-75 overflow-auto">
                   <UlCustom>
                     {records.map(record => (
                       <li key={record.idRegistro.toString()}>

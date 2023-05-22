@@ -21,7 +21,7 @@ import { AdministratorMessage } from '../components/administratorMessage/Adminis
 import { ADMIN_OPTIONS } from '../../../constants/consts';
 import { UserManagement } from '../components/userManagement';
 import { View } from '../components/view/View';
-import { getValues } from '../../../utils/functions';
+import { validateValues } from '../../../utils/functions';
 
 const AdminDashboard = () => {
   const [show, setShow] = useState<boolean>(false);
@@ -29,7 +29,7 @@ const AdminDashboard = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const authContext = useContext<AuthContextType | undefined>(AuthContext);
-  const isAuthenticated = getValues(authContext?.userAuthenticated);
+  const isAuthenticated = validateValues(authContext?.userAuthenticated);
   const isAdmin = authContext?.userAuthenticated?.rol === 1 ? true : false;
   const location = useLocation();
   const navigation = useNavigate();

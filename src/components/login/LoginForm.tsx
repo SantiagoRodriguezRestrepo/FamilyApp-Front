@@ -4,7 +4,7 @@ import { END_POINTS } from '../../constants/Api';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import {
   fetchWrapper,
-  getValues,
+  validateValues,
   handleOnlyNumbers,
 } from '../../utils/functions';
 import { toast } from 'sonner';
@@ -35,7 +35,7 @@ export const LoginForm = ({
   const navigation = useNavigate();
 
   const validateUserLogged = () => {
-    const isAuthenticated = getValues(authContext?.userAuthenticated);
+    const isAuthenticated = validateValues(authContext?.userAuthenticated);
     const isAdmin = authContext?.userAuthenticated?.rol === 1 ? true : false;
 
     if (!isAuthenticated) {
