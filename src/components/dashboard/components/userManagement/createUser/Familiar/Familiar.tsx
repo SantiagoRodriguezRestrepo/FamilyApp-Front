@@ -5,7 +5,11 @@ import { USER_TYPES } from '../../../../../../constants/consts';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { ButtonCustom } from '../../../../../../theme/components/style';
 import bcrypt from 'bcryptjs';
-import { fetchWrapper } from '../../../../../../utils/functions';
+import {
+  fetchWrapper,
+  handleInputChangeNumber,
+  handleInputChangeString,
+} from '../../../../../../utils/functions';
 import { IUser } from '../../../../../../models/authUser';
 import { END_POINTS } from '../../../../../../constants/Api';
 import { TPropsCreateFamiliar } from '../../../../../../utils/types';
@@ -15,6 +19,7 @@ export const Familiar = ({ fetchDataUser }: TPropsCreateFamiliar) => {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm<IUser>({ mode: 'onChange' });
   const [showPassword, setShowPassword] = useState(false);
   const [dataUser, setDataUser] = useState<IUser>({
@@ -50,6 +55,7 @@ export const Familiar = ({ fetchDataUser }: TPropsCreateFamiliar) => {
       const options = { method: 'POST' };
       await fetchWrapper(url, options);
       await fetchDataUser();
+      reset();
     } catch (error) {
       await fetchDataUser();
       throw new Error(`Error al crear usuario: ${error}`);
@@ -65,10 +71,11 @@ export const Familiar = ({ fetchDataUser }: TPropsCreateFamiliar) => {
             <Form.Control
               type="text"
               autoComplete="off"
-              placeholder="Ej: Juan Santiago"
+              placeholder="Ej: Juan"
               {...register('nombre', {
                 required: 'Debe ingresar un nombre',
               })}
+              onInput={handleInputChangeString}
             />
             {errors.nombre && (
               <span className="text-danger small">{errors.nombre.message}</span>
@@ -85,6 +92,7 @@ export const Familiar = ({ fetchDataUser }: TPropsCreateFamiliar) => {
               {...register('apellido', {
                 required: 'Debe ingresar un apellido',
               })}
+              onInput={handleInputChangeString}
             />
             {errors.apellido && (
               <span className="text-danger small">
@@ -103,9 +111,7 @@ export const Familiar = ({ fetchDataUser }: TPropsCreateFamiliar) => {
               autoComplete="off"
               pattern="[0-9]*"
               placeholder="Ej: 7895432234"
-              onInput={(event: any) => {
-                event.target.value = event.target.value.replace(/[^0-9]/g, '');
-              }}
+              onInput={handleInputChangeNumber}
               {...register('id_usuario', {
                 required: 'Debe ingresar un numero de cédula',
               })}

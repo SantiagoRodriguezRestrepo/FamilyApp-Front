@@ -18,16 +18,18 @@ import {
   SearchContainer,
 } from './style';
 import { ButtonCustom, Logo } from '../../theme/components/style';
-import { TToken } from '../../utils/types';
+import { TPropsSearchParams, TToken } from '../../utils/types';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext, AuthContextType } from '../../context/AuthContext';
 import { decodeJWT } from '../../utils/auth';
 import { ROUTES } from '../../constants/Routes';
 
-export const LoginForm = () => {
+export const LoginForm = ({
+  searchQuery,
+  setSearchQuery,
+}: TPropsSearchParams) => {
   const [userId, setUserId] = useState<string>('');
   const [userPassword, setUserPassword] = useState<string>('');
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const authContext = useContext<AuthContextType | undefined>(AuthContext);
   const navigation = useNavigate();
@@ -70,8 +72,17 @@ export const LoginForm = () => {
   };
 
   const handleSearch = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    toast.error('No se encontro el usuario.');
+    try {
+      const url = `${END_POINTS.RECLUSE}/${searchQuery}`;
+      const options = { method: 'GET' };
+      const response = await fetchWrapper(url, options);
+      if (response !== null) {
+        navigation(ROUTES.VISUALIZADOR)
+      }
+    } catch (error) {
+      toast.error('No se encontro la reclusa.');
+      throw new Error(`Error al iniciar sesion: ${error}`);
+    }
   };
 
   const handleInputChange = (

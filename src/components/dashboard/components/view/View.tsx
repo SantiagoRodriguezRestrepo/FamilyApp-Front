@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { PopUpImage } from './components/popUpImage/PopUpImage';
 import { END_POINTS } from '../../../../constants/Api';
-import { fetchWrapper } from '../../../../utils/functions';
+import { fetchWrapper, formatDate } from '../../../../utils/functions';
 import { IRecord } from '../../../../utils/interfaces';
 
 export const View = () => {
@@ -43,12 +43,6 @@ export const View = () => {
     } catch (error) {
       throw new Error(`Error al consultar los registros: ${error}`);
     }
-  };
-
-  const formatDate = (date: Date): string => {
-    const fecha = new Date(date);
-    const formato = fecha.toLocaleDateString();
-    return formato;
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +84,7 @@ export const View = () => {
   return (
     <>
       <Container className="text-center pt-3 mt-3">
-        <h1 className="mb-5">Imagenes cargadas:</h1>
+        <h1 className="mb-5">Imágenes cargadas</h1>
       </Container>
       <Container fluid className="h-100">
         <Card>

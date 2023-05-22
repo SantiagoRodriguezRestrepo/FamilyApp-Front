@@ -38,3 +38,22 @@ export type TPropsDeleteUser = {
   fetchDataUser: () => Promise<void>;
   fetchDataRecluse: () => Promise<void>;
 };
+
+export type TPropsSearchParams = {
+  searchQuery: string;
+  setSearchQuery: Dispatch<SetStateAction<string>>;
+};
+
+export type TPropsVisualizadorParam = {
+  idRecluse: string;
+};
+
+export interface TPropsRecluseRecord {
+  idRegistro?: Number;
+  urlImagen?: string;
+  titulo?: string;
+  comentario?: string;
+  fecha?: Date;
+  estado?: Number;
+  idReclusa?: string;
+}

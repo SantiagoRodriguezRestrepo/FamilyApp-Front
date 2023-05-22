@@ -128,6 +128,7 @@ export const UserDashboard = () => {
                         type="text"
                         autoComplete="off"
                         placeholder="Ej: Sala de la casa"
+                        maxLength={50}
                         {...register('title', {
                           required: 'Debe ingresar un titulo',
                         })}
@@ -184,7 +185,10 @@ export const UserDashboard = () => {
                         placement="right"
                         overlay={
                           <Tooltip id="button-tooltip-2">
-                            Edwarr Malvado
+                            Debe cargar una única imagen, la recomendación es
+                            una imagen panorámica u optimizada para visualizar
+                            en 360 grados preferiblemente en formatos JPEG, JPG,
+                            PNG, AVIF
                           </Tooltip>
                         }
                       >

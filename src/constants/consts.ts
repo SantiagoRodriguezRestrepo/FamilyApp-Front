@@ -13,7 +13,7 @@ export const USER_OPTIONS = [
   {
     NAME: 'Cargar registro',
     VALUE: 'upload',
-  }
+  },
 ];
 
 export const USER_TYPES = [
@@ -25,4 +25,19 @@ export const USER_TYPES = [
     NAME: 'Familiar',
     VALUE: 2,
   },
+];
+
+export const MONTHS = [
+  'enero',
+  'febrero',
+  'marzo',
+  'abril',
+  'mayo',
+  'junio',
+  'julio',
+  'agosto',
+  'septiembre',
+  'octubre',
+  'noviembre',
+  'diciembre',
 ];

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { IRecluse } from '../../../../../../models/authUser';
 import { ButtonCustom } from '../../../../../../theme/components/style';
 import { END_POINTS } from '../../../../../../constants/Api';
-import { fetchWrapper } from '../../../../../../utils/functions';
+import { fetchWrapper, handleInputChangeNumber, handleInputChangeString } from '../../../../../../utils/functions';
 import { toast } from 'sonner';
 import { TPropsCreateRecluse } from '../../../../../../utils/types';
 
@@ -12,6 +12,7 @@ export const Reclusa = ({ fetchDataRecluse }: TPropsCreateRecluse) => {
     register,
     formState: { errors },
     handleSubmit,
+    reset
   } = useForm<IRecluse>({ mode: 'onChange' });
 
   const onSubmit = async (data: IRecluse) => {
@@ -20,6 +21,7 @@ export const Reclusa = ({ fetchDataRecluse }: TPropsCreateRecluse) => {
       const options = { method: 'POST' };
       await fetchWrapper(url, options);
       fetchDataRecluse();
+      reset();
     } catch (error) {
       fetchDataRecluse();
       toast.error('No se ha podido crear la reclusa.');
@@ -36,10 +38,11 @@ export const Reclusa = ({ fetchDataRecluse }: TPropsCreateRecluse) => {
             <Form.Control
               type="text"
               autoComplete="off"
-              placeholder="Ej: Juan Santiago"
+              placeholder="Ej: Santiago"
               {...register('nombre', {
                 required: 'Debe ingresar un nombre',
               })}
+              onInput={handleInputChangeString}
             />
             {errors.nombre && (
               <span className="text-danger small">{errors.nombre.message}</span>
@@ -56,6 +59,7 @@ export const Reclusa = ({ fetchDataRecluse }: TPropsCreateRecluse) => {
               {...register('apellido', {
                 required: 'Debe ingresar un apellido',
               })}
+              onInput={handleInputChangeString}
             />
             {errors.apellido && (
               <span className="text-danger small">
@@ -74,9 +78,7 @@ export const Reclusa = ({ fetchDataRecluse }: TPropsCreateRecluse) => {
               autoComplete="off"
               pattern="[0-9]*"
               placeholder="Ej: 7895432234"
-              onInput={(event: any) => {
-                event.target.value = event.target.value.replace(/[^0-9]/g, '');
-              }}
+              onInput={handleInputChangeNumber}
               {...register('idReclusa', {
                 required: 'Debe ingresar un número de cédula',
               })}
@@ -96,9 +98,7 @@ export const Reclusa = ({ fetchDataRecluse }: TPropsCreateRecluse) => {
               autoComplete="off"
               pattern="[0-9]*"
               placeholder="Ej: 7895432234"
-              onInput={(event: any) => {
-                event.target.value = event.target.value.replace(/[^0-9]/g, '');
-              }}
+              onInput={handleInputChangeNumber}
               {...register('idFamiliar', {
                 required: 'Debe ingresar un número de cédula de un familiar',
               })}

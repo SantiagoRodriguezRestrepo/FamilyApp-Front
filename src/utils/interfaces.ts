@@ -46,3 +46,13 @@ export interface IRegister {
   description: string;
   file: any;
 }
+
+export interface IRecluseRecord {
+  idRegistro: Number;
+  urlImagen: string;
+  titulo: string;
+  comentario: string;
+  fecha: Date;
+  estado: Number;
+  idReclusa: string;
+}
