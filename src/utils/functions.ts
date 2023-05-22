@@ -17,7 +17,7 @@ export const fetchWrapper = async (
 
 export const handleOnlyNumbers = (value: string) => value.replace(/\D/g, '');
 
-export const handleOnlyLetters = (value: string) => value.replace(/[^A-Za-z]/g, '');
+export const handleOnlyLetters = (value: string) => value.replace(/[^A-Za-z\s]/g, '');
 
 export const getValues = (user: IUser | undefined): boolean => {
   if (!user || Object.entries(user).length === 0 || !user.id) {
