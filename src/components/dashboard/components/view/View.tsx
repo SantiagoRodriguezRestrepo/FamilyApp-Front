@@ -56,14 +56,15 @@ export const View = () => {
     setFilteredUsers([]);
   };
 
-  const onDeleteUser = async (id: number) => {
+  const onDeleteRecord = async (id: number, title: string) => {
     try {
       const url = `${END_POINTS.RECORD}/${id}`;
       const options = { method: 'DELETE' };
       await fetchWrapper(url, options);
       getRecords();
+      toast.success(`Registro "${title}" se ha eliminado.`);
     } catch (error) {
-      getRecords();
+      toast.error('No se ha podido eliminar el registro.');
       throw new Error(`Error al eliminar registro: ${error}`);
     }
   };
@@ -72,7 +73,7 @@ export const View = () => {
     toast.error(`Desea elminar el registro ${title}`, {
       action: {
         label: 'Aceptar',
-        onClick: () => onDeleteUser(id),
+        onClick: () => onDeleteRecord(id, title),
       },
       cancel: {
         label: 'Cancelar',
