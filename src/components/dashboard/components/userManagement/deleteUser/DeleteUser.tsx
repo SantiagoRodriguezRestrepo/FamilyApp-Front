@@ -26,9 +26,9 @@ export const DeleteUser = ({
       await fetchWrapper(url, options);
       fetchDataUser();
       fetchDataRecluse();
+      toast.success(`Se elimino ${type === 'user' ? 'usuario' : 'reclusa'} correctamente`)
     } catch (error) {
-      fetchDataRecluse();
-      fetchDataUser();
+      toast.success(`Error al eliminar ${type === 'user' ? 'usuario' : 'reclusa'}: ${error}`)
       throw new Error(
         `Error al eliminar ${type === 'user' ? 'usuario' : 'reclusa'}: ${error}`
       );
